@@ -16,15 +16,15 @@
 ============================================================
 
 nurses
-- user_id       VARCHAR(20)         NN / UQ / PK
+- user_id       VARCHAR(20)         NN   UQ  PK
 - password      VARCHAR(255)        NN  
 - name          VARCHAR(15)         NN
-- tel_number    VARCHAR(11)         NN / UQ / FK (tel_auth_number)
+- tel_number    VARCHAR(11)         NN   UQ  FK (tel_auth_number)
 - join_path     VARCHAR(5)          NN
 - sns_id        VARCHAR(255)   
 
 tel_auth_number
-- tel_number    VARCHAR(11)         NN  UQ  PK   
+- tel_number    VARCHAR(11)         NN   UQ  PK   
 - auth_number   VARCHAR(4)          NN
 
 customers
