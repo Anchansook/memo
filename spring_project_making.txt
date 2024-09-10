@@ -1,0 +1,9 @@
+< Spring 프로젝트 F1으로 생성 >
+
+- Spring Initializr: Specify Spring Boot version
+- 스프링 부트 버전 선택
+- 사용할 언어 선택
+- 프로젝트 그룹명 작성 (ex : com.korit)
+- 프로젝트명 작성 (ex : senicare)
+- 패키지 타입 선택
+- 자바 버전 선택

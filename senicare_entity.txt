@@ -16,12 +16,12 @@
 ============================================================
 
 nurses
-- user_id        VARCHAR(20)    NN   UQ   PK
-- password     VARCHAR(255)   NN  
-- name          VARCHAR(15)    NN
-- tel_number   VARCHAR(11)    NN   UQ   FK (tel_auth_number)
-- join_path     VARCHAR(5)      NN
-- sns_id         VARCHAR(255)   
+- user_id           VARCHAR(20)    NN   UQ   PK
+- password        VARCHAR(255)   NN  
+- name             VARCHAR(15)    NN
+- tel_number      VARCHAR(11)    NN   UQ   FK (tel_auth_number)
+- join_path        VARCHAR(5)      NN
+- sns_id            VARCHAR(255)   
 
 tel_auth_number
 - tel_number     VARCHAR(11)   NN  UQ  PK   
@@ -34,7 +34,7 @@ customers
 - birth                  VARCHAR(6)      NN
 - charger              VARCHAR(20)     NN   FK (nurses)
 - address              TEXT                NN
-- location              VARCHAR(30)     NN
+- location              VARCHAR(60)     NN
 
 tools
 - tool_number    INT                  NN   UQ   PK   AI
@@ -46,7 +46,7 @@ care_records
 - record_number     INT                 NN   UQ   PK  AI
 - record_date         DATE               NN       
 - contents             TEXT                NN
-- used_tool            INT                 FK (tools)            
+- used_tool            INT                         FK (tools)            
 - count                 INT                 
-- charger               VARCHAR(20)    NN   FK (nurses)
-- custom_number    INT                 NN   FK (customers)
+- charger               VARCHAR(20)    NN    FK (nurses)
+- custom_number    INT                 NN    FK (customers)
