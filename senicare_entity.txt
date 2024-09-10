@@ -16,33 +16,48 @@
 ============================================================
 
 nurses
+<<<<<<< HEAD
 - user_id           VARCHAR(20)    NN   UQ   PK
 - password        VARCHAR(255)   NN  
 - name             VARCHAR(15)    NN
 - tel_number      VARCHAR(11)    NN   UQ   FK (tel_auth_number)
 - join_path        VARCHAR(5)      NN
 - sns_id            VARCHAR(255)   
+=======
+- user_id        VARCHAR(20)    NN   UQ   PK
+- password       VARCHAR(255)   NN  
+- name           VARCHAR(15)    NN
+- tel_number     VARCHAR(11)    NN   UQ   FK (tel_auth_number)
+- join_path      VARCHAR(5)     NN
+- sns_id         VARCHAR(255)   
+>>>>>>> d3a64faa53b6bd97323d3d7daa2e4d5362b24847
 
 tel_auth_number
 - tel_number     VARCHAR(11)   NN  UQ  PK   
-- auth_number   VARCHAR(4)    NN
+- auth_number    VARCHAR(4)    NN
 
 customers
-- custom_number    INT                  NN   UQ   PK   AI
-- profile_image       TEXT                NN      
+- custom_number        INT             NN   UQ   PK   AI
+- profile_image        TEXT            NN      
 - name                 VARCHAR(15)     NN   
-- birth                  VARCHAR(6)      NN
+- birth                VARCHAR(6)      NN
 - charger              VARCHAR(20)     NN   FK (nurses)
+<<<<<<< HEAD
 - address              TEXT                NN
 - location              VARCHAR(60)     NN
+=======
+- address              TEXT            NN
+- location             VARCHAR(30)     NN
+>>>>>>> d3a64faa53b6bd97323d3d7daa2e4d5362b24847
 
 tools
-- tool_number    INT                  NN   UQ   PK   AI
-- name             VARCHAR(255)    NN
-- purpose         TEXT                 NN  
-- count            INT                   NN
+- tool_number      INT                  NN   UQ   PK   AI
+- name             VARCHAR(255)         NN
+- purpose          TEXT                 NN  
+- count            INT                  NN
 
 care_records
+<<<<<<< HEAD
 - record_number     INT                 NN   UQ   PK  AI
 - record_date         DATE               NN       
 - contents             TEXT                NN
@@ -50,3 +65,12 @@ care_records
 - count                 INT                 
 - charger               VARCHAR(20)    NN    FK (nurses)
 - custom_number    INT                 NN    FK (customers)
+=======
+- record_number       INT                 NN   UQ   PK  AI
+- record_date         DATE                NN       
+- contents            TEXT                NN
+- used_tool           INT                 FK (tools)            
+- count               INT                 
+- charger             VARCHAR(20)         NN   FK (nurses)
+- custom_number       INT                 NN   FK (customers)
+>>>>>>> d3a64faa53b6bd97323d3d7daa2e4d5362b24847
