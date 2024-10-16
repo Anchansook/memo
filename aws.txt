@@ -132,6 +132,8 @@ java -jar -Dspring.profiles.active=production build/libs/senicare-1.jar
 -> node --version | npm --version (받아졌는지 확인)
 -> npm -g install npm (최신 버전으로 업데이트)
 -> 받은 이유 : pm2를 받기 위해 프로세스를 관리해줌
+
+# pm2 설치
 -> npm -g install pm2 
 -> cd senicare-back_GB-20240709 프로젝트 폴더 내에서
 -> pm2 init
@@ -186,3 +188,66 @@ Host senicare-web
 	Hostname 3.34.143.202
 	User ubuntu
 	IdentityFile C:\Users\user\.ssh\chansook.pem
+
+# 들어간 곳이 있으면 exit로 나가고 ssh senicare-web
+
+# node 설치
+-> curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+-> source ~/.bashrc (다운 받은 거 등록) : node version manager 받은 것임
+-> nvm install v20.18.0
+-> node --version | npm --version (받아졌는지 확인)
+-> npm -g install npm (최신 버전으로 업데이트)
+-> npm i -g serve
+-> serve -s build (에러 나와도 무시)
+-> 접속해보기
+
+# pm2 설치 (프로젝트 내에서)
+-> npm i -g pm2
+->  pm2 init
+-> vim ecosystem.config.js 안에서 수정
+module.exports = {
+  apps : [{
+    script: 'serve -s build',
+    watch: 'build'
+  }],
+};
+-> pm2 start
+-> pm2 log
+
+==========================================================
+<삭제 작업>
+
+RDS
+# 데이터베이스 삭제
+
+EC2
+# 인스턴스 삭제
+
+VPC
+# 보안 그룹 제거 (was, web 먼저 삭제 후 sql도 삭제)
+# 라우팅 테이블 삭제
+-> id 클릭
+-> 서브넷 연결
+-> 체크 해제 -> 연결 저장 -> 삭제
+# 서브넷 삭제
+-> was, web 먼저 삭제 후 db도 삭제
+# 인터넷 게이트웨이 삭제
+-> 분리 후 삭제
+
+RDS
+# 데이터베이스 삭제 확인 후 진행
+# 옵션 그룹 삭제
+# 파라미터 그룹 삭제
+# 서브넷 그룹 삭제
+
+VPC
+# VPC 삭제
+
+EC2
+# 키페어 삭제
+
+# 사용자 삭제
+-> 콘솔로 로그인 (루트)
+-> IAM -> 사용자 -> 삭제
+
+# .ssh 폴더 내용 전체 삭제 (본인 컴퓨터 아니면 휴지통도 삭제)
