@@ -1,0 +1,188 @@
+Host jump 
+    Hostname 13.125.179.157
+    User ec2-user
+    IdentityFile C:\Users\user\.ssh\chansook.pem
+
+# .ssh 폴더 생성 -> 안으로 .pem 넣어주기 -> config 파일 생성 확장자 .txt X 지우기
+
+https://support.console.aws.amazon.com/support/home?nc2=h_ql_cu#/case/create
+
+Host web1
+	Hostname 10.0.71.179
+	User ec2-user
+	IdentityFile C:\Users\user\.ssh\chansook.pem
+             ProxyCommand ssh.exe jump -W %h:%p
+
+Host web2
+	Hostname 10.0.81.81
+	User ec2-user
+	IdentityFile C:\Users\user\.ssh\chansook.pem
+             ProxyCommand ssh.exe jump -W %h:%p
+
+python -m SimpleHTTPServer 3000
+
+mysqladmin ping -u admin -p -h 데이터베이스 엔드포인트
+
+===============================================================
+- 프라이빗 있을 때 '넷 게이트웨이' 생성
+
+# VPC
+-> 생성
+-> VPC 설정 편집(DNS 호스트 이름 활성화 : RDS 퍼블릭으로 잡을 수 있음) 
+-> 인터넷 게이트웨이(생성 후 연결) 
+-> 서브넷(web(1), was(1), db(2)) | /20이 오면 단위 16씩 증가 
+-> 인터넷 게이트웨이랑 연결 : 퍼블릭 | 라우팅 테이블 | 라우팅 편집 | 망연결 : 서브넷 연결 
+-> 보안 그룹
+
+# EC2
+-> 인스턴스 | 인스턴스 시작(front | was)
+
+# RDS
+-> 옵션 그룹
+-> 파라미터 그룹
+-> 서브넷 그룹
+-> 데이터베이스 | 생성
+
+# MySQL workbentch
+-> Connection
+-> 호스트네임에 엔드포인트 복사해서 넣어주기
+
+# back에 가서 프로퍼티즈 데이터베이스 연결 부분 수정
+-> 포트 앞부분 엔드포인트로 넣어주기
+
+<빌드>
+: 개발 코드를 실행 가능한 파일로 패키징
+: gradlew로 가능함
+-> ./gradlew clean build
+-> build -> libs -> .jar 생성
+-> build.gradle에 가서 버전 지우기 '1' 그러고 명령어 다시 실행
+-> java -jar build/libs/senicare-1.jar
+
+<환경 나누기>
+resources 폴더 아래 프로퍼티즈 파일 복사하고 파일명 변경 application-환경.properties
+-> ./gradlew clean build -Dspring.profiles.active=production
+
+* java -jar build/libs/senicare-1.jar
+-> application-properties
+* java -jar -Dspring.profiles.active=production build/libs/senicare-1.jar
+-> application.production.properties
+
+===========================================================
+
+C:\Users\user\.ssh 폴더 열어서 Host 만든걸로 추가
+-> 
+Host senicare-was
+	Hostname 3.34.187.206
+	User ubuntu
+	IdentityFile C:\Users\user\.ssh\chansook.pem
+
+-> cmd | powershell | gitbash 택 중 1 ssh senicare-was 들어가기
+
+============================================================
+# ssh senicare-was
+
+# apt -> java 다운
+# 1. apt 최신버전 업데이트
+sudo apt update
+
+# 2. jdk 다운
+sudo apt install openjdk-17-jdk
+-> /usr/lib/jvm 다운 받아져 있음 cd로 들어가서 ls 확인해보면 목록 보임
+-> java-17-openjdk-amd64 들어가서 ls bin 있음 이걸 실행시킬 거임
+-> /usr/lib/jvm/java-17-openjdk-amd64 경로에 다운됨
+
+# 3. 다운로드된 경로를 JAVA_HOME 환경변수에 등록
+sudo vi /etc/environment
+안에 맨 끝 줄에 JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64" 작성 후 :wq
+
+# 4. environment 변경 적용
+source /etc/environment
+-> 확인 : echo $JAVA_HOME
+-> 자바 확인 : java --version
+ 
+# 5. github에서 코드 clone (올려져 있는 back리포지토리를 주소 복사 후 clone)
+-> git clone 복사한 주소
+-> ls 확인 
+-> cd 파일명
+-> ls 확인해보면 파일들 보임
+
+# (.gitignore에서 properties 풀어주고 명령어 실행)
+git rm -r --cached .
+
+# 프로젝트 내부에서
+git pull origin main으로 변경사항 가져오기
+
+# build 해주기
+./gradlew clean build
+권한이 없다해서 걍 다 주기
+chmod 7777 ./gradlew
+
+# build 중 터짐
+.gitignore 에서 빌드 주석처리 후 vscode 내에서 다시 ./gradlew clean build
+빌드 완료되면 git add . | git commit -m "" | git push
+
+# 실행
+java -jar -Dspring.profiles.active=production build/libs/senicare-1.jar
+
+# 6. node 설치
+-> curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+-> source ~/.bashrc (다운 받은 거 등록) : node version manager 받은 것임
+-> nvm list-remote
+-> nvm install v20.18.0
+-> node --version | npm --version (받아졌는지 확인)
+-> npm -g install npm (최신 버전으로 업데이트)
+-> 받은 이유 : pm2를 받기 위해 프로세스를 관리해줌
+-> npm -g install pm2 
+-> cd senicare-back_GB-20240709 프로젝트 폴더 내에서
+-> pm2 init
+-> vi ecosystem.config.js (apps만 남기고 삭제 | scripts는 프로젝트 파일로, watch는 build로 변경)
+-> pm2 start
+-> pm2 status (online 확인 후)
+-> pm2 log (맨 아래쪽 started 확인)
+
+## 다시 들어가게 되면 퍼블릭 IP주소 변경된걸로 config에서 Hostname 변경 해줘야 함
+-> ssh senicare-was
+-> cd senicare-back_GB-20240709
+-> pm2 start
+-> pm2 status (online 확인 후)
+-> pm2 log (맨 아래쪽 started 확인)
+했더니 완룡
+
+===============================================================
+
+# react 프로젝트 최상단에서 
+.env 파일 생성
+변수 만들 때 반드시 REACT_APP_ 로~
+
+# apis 폴더의 index.ts 내용 변경
+// variable: API URL 상수 //
+const SENICARE_API_DOMAIN = process.env.REACT_APP_API_URL;
+
+# .env 파일 복붙 .env.production로 파일명 변경
+-> production 파일에는 로컬호스트 자리에 퍼블릭IP주소를 넣어줌
+
+# 설치
+npm i -g dotenv-cli
+npm i -D dotenv-cli
+
+# package.json 변경
+scripts 안에
+"build": "dotenv -e .env -- react-scripts build",
+"build:production": "dotenv -e .env.production -- react-scripts build",
+
+# npm run build
+-> npm install -g serve
+-> serve -s build
+
+# npm run build:production
+-> serve -s build
+
+# .gitignore에서 build 주석 처리 후 깃허브에 다시 업로드
+-> git rm -r --cached .
+-> git add . | git commit -m "" | git push
+
+# 인스턴스에서 프론트 퍼블릭IP주소 복사해서 config 편집
+Host senicare-web
+	Hostname 3.34.143.202
+	User ubuntu
+	IdentityFile C:\Users\user\.ssh\chansook.pem
